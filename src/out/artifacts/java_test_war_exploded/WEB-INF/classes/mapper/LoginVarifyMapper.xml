@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis .org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syscom.lingan.dao.LoginVarifyMapper">
+<!--    增加-->
+    <insert id="addUser" parameterType="UserFile">
+        INSERT INTO `java_quasar_test`.`sys_user`(`USER_ID`, `USER_NAME`, `PASSWORD`)
+        VALUES
+        (#{id}, #{name}, #{password});
+    </insert>
+<!--    刪除-->
+    <delete id="deleteUserById" parameterType="String">
+        DELETE FROM `java_quasar_test`.`sys_user`
+        WHERE `USER_ID` = #{id}
+    </delete>
+<!--    更新-->
+    <update id="updateUser" parameterType="UserFile">
+        UPDATE `java_quasar_test`.`sys_user` SET
+        `USER_NAME` = #{name},
+        `PASSWORD` = #{password}
+        WHERE `USER_ID` = #{id}
+    </update>
+    <!--    使用者資訊查詢 by json-->
+    <select id="checkUserFile" parameterType="UserFile" resultMap="userResultMap">
+        SELECT * FROM `java_quasar_test`.`sys_user`
+        <where>
+            <choose>
+                <when test="id != null">
+                     USER_ID LIKE CONCAT('%', #{id}, '%')
+                </when>
+                <when test="name != null">
+                    AND USER_NAME LIKE CONCAT('%', #{name}, '%')
+                </when>
+                <otherwise>
+                    AND 1 = 1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <!--    使用者資訊查詢 by web-->
+    <select id="checkUserFileFront" parameterType="UserFile" resultMap="userResultMap">
+        SELECT * FROM `java_quasar_test`.`sys_user`
+        <where>
+            <choose>
+                <when test="id != null">
+                    AND USER_ID LIKE CONCAT('%', #{id}, '%')
+                </when>
+                <when test="name != null">
+                    AND USER_NAME LIKE CONCAT('%', #{name}, '%')
+                </when>
+                <otherwise>
+                    AND 1 = 1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <resultMap id="userResultMap" type="UserFile">
+        <result property="id" column="USER_ID" />
+        <result property="name" column="USER_NAME" />
+        <result property="password" column="PASSWORD" />
+    </resultMap>
+</mapper>

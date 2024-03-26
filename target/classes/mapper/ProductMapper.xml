@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis .org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syscom.lingan.dao.ProductMapper">
+
+    <!--    ProductAndTax自訂譯名稱   多對一 所有Product對於base_param這個的查詢 -->
+    <select id="productListAndTax" resultMap="ProductAndTax">
+        SELECT p.ITEM_NO,p.ITEM_NAME,p.PRICE,p.EFF_DATE_FROM,p.EFF_DATE_TO,p.TAX,p.CREATOR,p.CREATE_TIME,p.UPDATER,p.UPDATE_TIME,b.TAG,b.CONTENT_ZH_TW
+        from product p,base_param b
+        WHERE p.TAX = b.TAG
+    </select>
+    <resultMap id="ProductAndTax" type="syscom.lingan.To.ProductTo">
+        <result property="item_no" column="ITEM_NO"/>
+        <result property="item_name" column="ITEM_NAME"/>
+        <result property="price" column="PRICE"/>
+        <result property="eff_date_from" column="EFF_DATE_FROM"/>
+        <result property="eff_date_to" column="EFF_DATE_TO"/>
+        <result property="tax" column="TAX"/>
+        <result property="creator" column="CREATOR"/>
+        <result property="create_time" column="CREATE_TIME"/>
+        <result property="updater" column="UPDATER"/>
+        <result property="update_time" column="UPDATE_TIME"/>
+        <association property="taxName" javaType="Base_param">
+            <result property="tag" column="TAG"/>
+            <result property="content_zh_tw" column="CONTENT_ZH_TW"/>
+        </association>
+    </resultMap>
+
+</mapper>
